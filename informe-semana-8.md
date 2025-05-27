@@ -56,6 +56,8 @@ POSTGRES_DB=tendenciasdb
 PGADMIN_DEFAULT_EMAIL=admin@admin.com
 PGADMIN_DEFAULT_PASSWORD=admin123
 ```
+![Captura de pantalla](semana8/1.png)
+
 # Configuración de `docker-compose.yml`
 
 En este paso definiremos los servicios para PostgreSQL, pgAdmin y el backend, utilizando volúmenes y redes personalizadas para asegurar la persistencia de datos y la comunicación entre contenedores.
@@ -109,6 +111,7 @@ networks:
   backend-network:
     driver: bridge
 ```
+![Captura de pantalla](semana8/2.png)
 # Paso 3: Crear el Dockerfile multi-stage para el backend
 
 Este Dockerfile utiliza una construcción multi-stage para optimizar la imagen final del backend. Primero compila el proyecto con Maven y luego crea una imagen ligera solo con el archivo `.jar` resultante.
@@ -129,6 +132,7 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ```
+![Captura de pantalla](semana8/3.png)
 # Paso 4: Construir y levantar los servicios
 
 Ejecuta el siguiente comando para construir las imágenes (incluyendo la del backend) y levantar todos los servicios definidos en `docker-compose.yml`:
@@ -158,6 +162,7 @@ docker-compose up --build
    - Confirma que la aplicación está corriendo y se conecta correctamente a la base de datos PostgreSQL.
 
 ---
+![Captura de pantalla](semana8/4.png)
 # 9. Resultados esperados
 
 - Los contenedores de PostgreSQL, pgAdmin y backend se levantan correctamente sin errores.
