@@ -109,3 +109,77 @@ networks:
   backend-network:
     driver: bridge
 ```
+# Paso 3: Crear el Dockerfile multi-stage para el backend
+
+Este Dockerfile utiliza una construcción multi-stage para optimizar la imagen final del backend. Primero compila el proyecto con Maven y luego crea una imagen ligera solo con el archivo `.jar` resultante.
+
+```dockerfile
+# Stage 1: Build
+FROM maven:3.8.6-openjdk-17 AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Stage 2: Run
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+```
+# Paso 4: Construir y levantar los servicios
+
+Ejecuta el siguiente comando para construir las imágenes (incluyendo la del backend) y levantar todos los servicios definidos en `docker-compose.yml`:
+
+```bash
+docker-compose up --build
+```
+# Paso 5: Verificación
+
+1. **Acceder a pgAdmin**  
+   Abre tu navegador y visita:  
+   [http://localhost:8080](http://localhost:8080)  
+   Inicia sesión con las credenciales definidas en las variables de entorno.
+
+2. **Configurar conexión en pgAdmin**  
+   - Añade un nuevo servidor o conexión.  
+   - Configura los datos de conexión a PostgreSQL:  
+     - Host: `postgres`  
+     - Puerto: `5432`  
+     - Usuario: `${enrique}`  
+     - Contraseña: `${enrique123}`  
+     - Base de datos: `${POSTGRES_DB}`
+
+3. **Verificar backend**  
+   - Accede a la aplicación backend en:  
+     [http://localhost:8081](http://localhost:8081)  
+   - Confirma que la aplicación está corriendo y se conecta correctamente a la base de datos PostgreSQL.
+
+---
+# 9. Resultados esperados
+
+- Los contenedores de PostgreSQL, pgAdmin y backend se levantan correctamente sin errores.
+- Los datos de PostgreSQL persisten entre reinicios gracias al volumen configurado.
+- pgAdmin puede conectarse y administrar la base de datos PostgreSQL.
+- El backend accede a la base de datos y responde a peticiones en el puerto configurado.
+
+---
+
+# 10. Bibliografía
+
+- [Docker Docs](https://docs.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [PostgreSQL Official Documentation](https://www.postgresql.org/docs/)
+- [pgAdmin Documentation](https://www.pgadmin.org/docs/)
+- [Spring Boot Documentation](https://spring.io/projects/spring-boot)
+
+---
+
+# 11. Enlace del audio
+
+Audio de la práctica  
+*(Aquí puedes agregar el enlace o indicar dónde encontrar el audio)*  
+
+
