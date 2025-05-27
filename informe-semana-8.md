@@ -180,6 +180,6 @@ docker-compose up --build
 # 11. Enlace del audio
 
 Audio de la práctica  
-*(Aquí puedes agregar el enlace o indicar dónde encontrar el audio)*  
+*(https://drive.google.com/file/d/1w9Ny9CDVWPzTP-vqlgSHghaDnWiicdMH/view?usp=sharing)*  
 
 
